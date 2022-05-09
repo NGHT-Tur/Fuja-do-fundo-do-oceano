@@ -11,6 +11,11 @@ var tub4;
 var tub5;
 var tub6;
 var migalhas;
+var nemo;
+var carnivoros;
+var nadando = 1;
+var afogamento = 0;
+var estado = nadando;
 
 function preload(){
 golfinhoNadando = loadAnimation("trex1.png","trex3.png","trex4.png");
@@ -38,28 +43,40 @@ bordas = createEdgeSprites();
 var aleatoria = Math.round(random(1,100));
 console.log(aleatoria);
 migalhas = 0;
+nemo = new Group();
+carnivoros = new Group();
 }
 
 function draw(){
 background("AliceBlue");
-//console.log (golfinho.y);
+console.log (golfinho.y);
+golfinho.collide(areia3);
+drawSprites();
+fill("Black");
+stroke("AliceBlue");
+textSize(24);
+text("score:"+ migalhas, 270,50);   
+if(estado === nadando){
+areia.velocityX = -2;
 if(keyDown("space")&& golfinho.y >= 150){
 golfinho.velocityY = -13;
 }
 golfinho.velocityY += 1; 
-golfinho.collide(areia3);
-areia.velocityX = -2;
 if(areia.x<0){
 areia.x=areia.width/2;
 }
 peixes();
 tubaroes();
-drawSprites();
 migalhas += Math.round(frameCount/60);
-fill("Black");
-stroke("AliceBlue");
-textSize(24);
-text("score:"+ migalhas, 270,50);      
+if(carnivoros.isTouching(golfinho)){
+estado = afogamento;
+}
+}
+else if(estado === afogamento){
+areia.velocityX = 0;
+nemo.setVelocityXEach(0);
+carnivoros.setVelocityXEach(0);
+} 
 }
 
 function peixes(){
@@ -71,6 +88,7 @@ peixescommedo.y = Math.round (random(0,120));
 peixescommedo.lifetime = 220;
 peixescommedo.depth = golfinho.depth;
 golfinho.depth += 1;
+nemo.add(peixescommedo);
 }
 }
 
@@ -97,5 +115,6 @@ default:break;
 tubaroes1.scale = 0.7
 tubaroes1.depth = golfinho.depth;
 tubaroes1.life = 220;
+carnivoros.add(tubaroes1);
 }
 }
