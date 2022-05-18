@@ -21,6 +21,9 @@ var marcontaminado;
 var marcontaminadoImage;
 var patrick;
 var patrickImage;
+var mortal;
+var separadodospais;
+var soprateirritar;
 
 function preload(){
 golfinhoNadando = loadAnimation("trex1.png","trex3.png","trex4.png");
@@ -35,6 +38,9 @@ tub6 = loadImage("obstacle6.png");
 afogado = loadAnimation("trex_collided.png");
 patrickImage = loadImage("restart.png");
 marcontaminadoImage = loadImage("gameOver.png");
+mortal = loadSound("jump.mp3");
+separadodospais = loadSound("die.mp3");
+soprateirritar = loadSound("checkPoint.mp3");
 }
 
 function setup(){
@@ -75,9 +81,10 @@ text("score:"+ migalhas, 270,50);
 if(estado === nadando){
 marcontaminado.visible = false;
 patrick.visible = false;
-areia.velocityX = -2;
+areia.velocityX = -(4+migalhas/100);
 if(keyDown("space")&& golfinho.y >= 150){
 golfinho.velocityY = -13;
+mortal.play();
 }
 golfinho.velocityY += 1; 
 if(areia.x<0){
@@ -86,8 +93,12 @@ areia.x=areia.width/2;
 peixes();
 tubaroes();
 migalhas += Math.round(frameCount/60);
+if(migalhas > 0 && migalhas % 100 === 0){
+soprateirritar.play();
+}
 if(carnivoros.isTouching(golfinho)){
 estado = afogamento;
+separadodospais.play();
 }
 }
 else if(estado === afogamento){
@@ -119,7 +130,7 @@ nemo.add(peixescommedo);
 function tubaroes(){
 if(frameCount % 60 === 0) {
 var tubaroes1 = createSprite(600,165,10,40);
-tubaroes1.velocityX = -6;
+tubaroes1.velocityX = -(6+migalhas/100);
 var pensamentosdechuveiro = Math.round (random(1,6));
 switch(pensamentosdechuveiro){
 case 1 :tubaroes1.addImage(tub1);
@@ -136,7 +147,7 @@ case 6 :tubaroes1.addImage(tub6);
 break;
 default:break;
 }
-tubaroes1.scale = 0.7
+tubaroes1.scale = 0.5;
 tubaroes1.depth = golfinho.depth;
 tubaroes1.life = 220;
 carnivoros.add(tubaroes1);
