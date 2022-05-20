@@ -24,6 +24,7 @@ var patrickImage;
 var mortal;
 var separadodospais;
 var soprateirritar;
+var frase = "Está muito frio, tomara que esquente";
 
 function preload(){
 golfinhoNadando = loadAnimation("trex1.png","trex3.png","trex4.png");
@@ -70,6 +71,7 @@ patrick.scale= 0.49;
 }
 
 function draw(){
+//console.log(frase);
 background("AliceBlue");
 //console.log (golfinho.y);
 golfinho.collide(areia3);
@@ -92,7 +94,7 @@ areia.x=areia.width/2;
 }
 peixes();
 tubaroes();
-migalhas += Math.round(frameCount/60);
+migalhas += Math.round(frameRate()/60);
 if(migalhas > 0 && migalhas % 100 === 0){
 soprateirritar.play();
 }
@@ -111,7 +113,19 @@ nemo.setVelocityXEach(0);
 carnivoros.setVelocityXEach(0);
 marcontaminado.visible = true;
 patrick.visible = true;
+if(mousePressedOver(patrick)){
+barbaNegra();
+}
 } 
+}
+
+function barbaNegra(){
+estado = nadando;
+nemo.destroyEach ();
+carnivoros.destroyEach ();
+golfinho.changeAnimation("nadando");
+migalhas = 0;
+
 }
 
 function peixes(){
